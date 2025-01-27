@@ -13,7 +13,7 @@ class CarTest {
         Car car = new Car.Saab95(expectedNrDoors, Color.WHITE, 125, "Saab95");
         int actualNrDoors = car.getNrDoors();
 
-        assertEquals(expectedNrDoors, actualNrDoors, "The name returned by getName() should match the expected value.");
+        assertEquals(expectedNrDoors, actualNrDoors);
     }
 
     @Test
@@ -22,7 +22,7 @@ class CarTest {
         Car car = new Car.Saab95(2, Color.WHITE, expectedEnginePower, "Saab95");
         double actualEnginePower = car.getEnginePower();
 
-        assertEquals(expectedEnginePower, actualEnginePower, "The number returned by getEnginePower() should match the expected value.");
+        assertEquals(expectedEnginePower, actualEnginePower);
     }
 
 
@@ -31,11 +31,11 @@ class CarTest {
         Car car = new Car.Saab95(2, Color.red, 125, "Saab95");
         double initialSpeed = car.getCurrentSpeed(); // Call the getter for currentSpeed
 
-        assertEquals(0, initialSpeed, "getCurrentSpeed should return 0 after the car is initialized.");
+        assertEquals(0, initialSpeed);
 
         car.startEngine();
         double speedAfterStart = car.getCurrentSpeed();
-        assertEquals(0.1, speedAfterStart, "getCurrentSpeed should return 0.1 after starting the engine.");
+        assertEquals(0.1, speedAfterStart);
     }
 
     @Test
@@ -44,17 +44,15 @@ class CarTest {
         Car car = new Car.Saab95(2, expectedColor, 125, "Saab95");
         Color actualColor = car.getColor();
 
-        assertEquals(expectedColor, actualColor, "The color returned by getColor() should match the expected value.");
+        assertEquals(expectedColor, actualColor);
     }
 
     @Test
     void testSetColor() {
         Car car = new Car.Saab95(4, Color.BLUE, 100, "Saab95");
 
-        car.setColor(Color.RED); // Call the setter to change the color
-
-        // Assert
-        assertEquals(Color.RED, car.getColor(), "setColor should update the car's color to red.");
+        car.setColor(Color.RED);
+        assertEquals(Color.RED, car.getColor());
     }
 
     @Test
@@ -70,6 +68,7 @@ class CarTest {
         car.stopEngine();
         assertEquals(0, car.getCurrentSpeed());
     }
+
 
     @Test
     void testMove() {
@@ -96,11 +95,11 @@ class CarTest {
     void testTurnRight() {
         Car car = new Car.Saab95(2, Color.red, 125, "Saab95");
         car.direction = 0;
-
         car.turnRight();
         assertEquals(90, car.direction);
     }
 
+    //Testing Saab95
     @Test
     void testTurbo(){
         Car.Saab95 Saab = new Car.Saab95(2, Color.red, 125, "Saab95");
@@ -114,7 +113,7 @@ class CarTest {
         Car.Saab95 Saab = new Car.Saab95(2, Color.red, 125, "Saab95");
         Saab.setTurboOff();
 
-        assertEquals(125 * 0.01, Saab.speedFactor(), 0.001, "Speed factor should be normal when turbo is off.");
+        assertEquals(125 * 0.01, Saab.speedFactor(), 0.001);
     }
 
     @Test
@@ -122,7 +121,7 @@ class CarTest {
         Car.Saab95 Saab = new Car.Saab95(2, Color.red, 125, "Saab95");
         Saab.setTurboOn();
 
-        assertEquals(125 * 0.01 * 1.3, Saab.speedFactor(), 0.001, "Speed factor should be normal when turbo is off.");
+        assertEquals(125 * 0.01 * 1.3, Saab.speedFactor(), 0.001);
     }
 
     @Test
@@ -134,7 +133,20 @@ class CarTest {
         assertEquals((125 * 0.01 * 1.3 * 10) + 0.1, saab.getCurrentSpeed(), 0.001);
     }
 
+//Testing Volvo240
+    @Test
+    void testSpeedFactor() {
+        Car.Volvo240 volvo = new Car.Volvo240(2, Color.red, 125, "Saab95");
+        assertEquals(1.25 * 125 * 0.01, volvo.speedFactor());
+    }
 
+    @Test
+    void testIncrementSpeed() {
+        Car.Volvo240 volvo = new Car.Volvo240(2, Color.red, 125, "Saab95");
+        volvo.startEngine();
+        volvo.incrementSpeed(100);
+        assertEquals(125, volvo.getCurrentSpeed(), 0.001);
+    }
 
 
 
