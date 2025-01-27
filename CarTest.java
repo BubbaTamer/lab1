@@ -79,8 +79,8 @@ class CarTest {
 
         car.move();
 
-        assertEquals(0.1, car.x, 0.001, "Car should move 0.1 units along the x-axis when facing east.");
-        assertEquals(0.0, car.y, 0.001, "Car should not move along the y-axis when facing east.");
+        assertEquals(0.1, car.x, 0.001);
+        assertEquals(0.0, car.y, 0.001);
     }
 
     @Test
@@ -89,7 +89,7 @@ class CarTest {
         car.direction = 0;
 
         car.turnLeft();
-        assertEquals(270, car.direction, "After turning left from north (90°), the car should face east (0°).");
+        assertEquals(270, car.direction);
     }
 
     @Test
@@ -98,7 +98,7 @@ class CarTest {
         car.direction = 0;
 
         car.turnRight();
-        assertEquals(90, car.direction, "After turning left from north (90°), the car should face east (0°).");
+        assertEquals(90, car.direction);
     }
 
     @Test
@@ -107,7 +107,7 @@ class CarTest {
         Saab.setTurboOn();
         Saab.setTurboOff();
 
-        assertFalse(Saab.getTurboOn(), "setColor should update the car's color to red.");
+        assertFalse(Saab.getTurboOn());
     }
     @Test
     void testSpeedFactorWithoutTurbo() {
@@ -131,7 +131,7 @@ class CarTest {
         saab.startEngine();
         saab.setTurboOn();
         saab.incrementSpeed(10);
-        assertEquals((125 * 0.01 * 1.3 * 10) + 0.1, saab.getCurrentSpeed(), 0.001, "Speed factor should be normal when turbo is off.");
+        assertEquals((125 * 0.01 * 1.3 * 10) + 0.1, saab.getCurrentSpeed(), 0.001);
     }
 
 
