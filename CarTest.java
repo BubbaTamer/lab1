@@ -29,7 +29,7 @@ class CarTest {
     @Test
     void testGetCurrentSpeed() {
         Car car = new Car.Saab95(2, Color.red, 125, "Saab95");
-        double initialSpeed = car.getCurrentSpeed(); // Call the getter for currentSpeed
+        double initialSpeed = car.getCurrentSpeed();
 
         assertEquals(0, initialSpeed);
 
