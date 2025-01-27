@@ -71,4 +71,71 @@ class CarTest {
         assertEquals(0, car.getCurrentSpeed());
     }
 
+    @Test
+    void testMove() {
+        Car car = new Car.Saab95(4, Color.WHITE, 100, "Saab95");
+        car.startEngine();
+        car.direction = 0;
+
+        car.move();
+
+        assertEquals(0.1, car.x, 0.001, "Car should move 0.1 units along the x-axis when facing east.");
+        assertEquals(0.0, car.y, 0.001, "Car should not move along the y-axis when facing east.");
+    }
+
+    @Test
+    void testTurnLeft() {
+        Car car = new Car.Saab95(2, Color.red, 125, "Saab95");
+        car.direction = 0;
+
+        car.turnLeft();
+        assertEquals(270, car.direction, "After turning left from north (90°), the car should face east (0°).");
+    }
+
+    @Test
+    void testTurnRight() {
+        Car car = new Car.Saab95(2, Color.red, 125, "Saab95");
+        car.direction = 0;
+
+        car.turnRight();
+        assertEquals(90, car.direction, "After turning left from north (90°), the car should face east (0°).");
+    }
+
+    @Test
+    void testTurbo(){
+        Car.Saab95 Saab = new Car.Saab95(2, Color.red, 125, "Saab95");
+        Saab.setTurboOn();
+        Saab.setTurboOff();
+
+        assertFalse(Saab.getTurboOn(), "setColor should update the car's color to red.");
+    }
+    @Test
+    void testSpeedFactorWithoutTurbo() {
+        Car.Saab95 Saab = new Car.Saab95(2, Color.red, 125, "Saab95");
+        Saab.setTurboOff();
+
+        assertEquals(125 * 0.01, Saab.speedFactor(), 0.001, "Speed factor should be normal when turbo is off.");
+    }
+
+    @Test
+    void testSpeedFactorWithTurbo() {
+        Car.Saab95 Saab = new Car.Saab95(2, Color.red, 125, "Saab95");
+        Saab.setTurboOn();
+
+        assertEquals(125 * 0.01 * 1.3, Saab.speedFactor(), 0.001, "Speed factor should be normal when turbo is off.");
+    }
+
+    @Test
+    void testIncrementSpeedWithTurbo() {
+        Car.Saab95 saab = new Car.Saab95(2, Color.red, 125, "Saab95");
+        saab.startEngine();
+        saab.setTurboOn();
+        saab.incrementSpeed(10);
+        assertEquals((125 * 0.01 * 1.3 * 10) + 0.1, saab.getCurrentSpeed(), 0.001, "Speed factor should be normal when turbo is off.");
+    }
+
+
+
+
+
 }
