@@ -1,27 +1,26 @@
-package org.example;
-
 import java.awt.*;
 
 public abstract class Car implements Movable {
 
     private final int nrDoors; // Number of doors on the car
     private final double enginePower; // Engine power of the car
-    public double currentSpeed; // The current speed of the car
     private Color color; // Color of the car
-    public final String modelName; // The car model name
+    private final String modelName; // The car model name
 
-    public double x;
-    public double y;
-    public double direction;
+    // don't allow external class to affect this
+
+    private double currentSpeed; // The current speed of the car
+
+    private double x = 0;
+    private double y = 0;
+    private double direction = 0;
 
     public Car(int nrDoors, Color color, double enginePower, String modelName) {
         this.nrDoors = nrDoors;
         this.color = color;
         this.enginePower = enginePower;
         this.modelName = modelName;
-        this.x = 0;
-        this.y = 0;
-        this.direction = 0;
+
         stopEngine();
     }
 
@@ -53,20 +52,55 @@ public abstract class Car implements Movable {
         this.currentSpeed = 0;
     }
 
+    protected abstract double speedFactor(); // override by implementing class
 
+    public void incrementSpeed(double amount) {
+        if (amount < 0 || amount > 1) throw new IllegalArgumentException("Amount must be between 0 and 1");
+        currentSpeed = Math.min(currentSpeed + speedFactor() * amount, enginePower);
+    }
+
+    public void decrementSpeed(double amount) {
+        if (amount < 0 || amount > 1) throw new IllegalArgumentException("Amount must be between 0 and 1");
+        currentSpeed = Math.max(currentSpeed - speedFactor() * amount, 0);
+    }
+
+    public void gas(double amount) {
+        incrementSpeed(amount);
+    }
+
+    public void brake(double amount) {
+        decrementSpeed(amount);
+    }
+
+    // Movable implementation
+    @Override
     public void move() {
-        x += this.currentSpeed * Math.cos(Math.toRadians(this.direction));
-        y += this.currentSpeed * Math.sin(Math.toRadians(this.direction));
+        x += currentSpeed * Math.cos(Math.toRadians(direction));
+        y += currentSpeed * Math.sin(Math.toRadians(direction));
     }
 
-
+    @Override
     public void turnLeft() {
-        this.direction = (this.direction - 90 + 360) % 360;
+        direction = (direction - 90) % 360;
+        if (direction < 0) {
+            direction += 360;
+        }
     }
 
-
+    @Override
     public void turnRight() {
-        this.direction = (this.direction + 90) % 360;
+        direction = (direction + 90) % 360;
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getDirection() {
+        return direction;
+    }
 }
