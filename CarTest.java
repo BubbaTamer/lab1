@@ -110,18 +110,44 @@ class CarTest {
     @Test
     void testTurboOff() {
         Saab95 Saab = new Saab95();
+        Car saab = new Saab95();
         Saab.setTurboOff();
 
         assertEquals(Saab.getEnginePower() * 0.01, Saab.speedFactor(), 0.001);
     }
 
     @Test
-    void testIncrementSpeedWithTurbo() {
+    void testGasWithTurbo() {
         Saab95 saab = new Saab95();
         saab.startEngine();
         saab.setTurboOn();
-        saab.incrementSpeed(1);
+        saab.gas(1);
         assertEquals((saab.getEnginePower() * 0.01 * 1.3) + 0.1, saab.getCurrentSpeed(), 0.001);
+    }
+
+    @Test
+    void testBrake()
+    {
+         Car volvo = new Volvo240();
+         volvo.startEngine();
+         volvo.brake(1);
+         assertEquals(0.0, volvo.getCurrentSpeed(), 0.001);
+    }
+
+    // test brake method should throw exception
+    @Test
+    void testBrakeFailure() {
+        Car volvo = new Volvo240();
+        assertThrows(IllegalArgumentException.class, () -> volvo.brake(-1));
+        assertThrows(IllegalArgumentException.class, () -> volvo.brake(2));
+    }
+
+    // test brake method should throw exception
+    @Test
+    void testGasFailure() {
+        Car volvo = new Volvo240();
+        assertThrows(IllegalArgumentException.class, () -> volvo.gas(-1));
+        assertThrows(IllegalArgumentException.class, () -> volvo.gas(2));
     }
 
     // Testing Volvo240
@@ -133,10 +159,10 @@ class CarTest {
     }
 
     @Test
-    void testIncrementSpeed() {
+    void testGas() {
         Volvo240 volvo = new Volvo240();
         volvo.startEngine();
-        volvo.incrementSpeed(1);
+        volvo.gas(1);
         assertEquals(1.35, volvo.getCurrentSpeed(), 0.001);
     }
 }
