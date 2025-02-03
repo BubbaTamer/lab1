@@ -165,4 +165,27 @@ class CarTest {
         volvo.gas(1);
         assertEquals(1.35, volvo.getCurrentSpeed(), 0.001);
     }
+
+    //Testing truck
+    @Test
+    void testRaisePlatformOverLimit() {
+        Scania scania = new Scania();
+        assertThrows(IllegalArgumentException.class, () -> scania.raisePlatform(80));
+    }
+
+    @Test
+    void testRaisePlatformWhileMoving() {
+        Scania scania = new Scania();
+        scania.startEngine();
+        assertThrows(IllegalArgumentException.class, () -> scania.raisePlatform(20));
+    }
+
+    @Test
+    void testTruckGas() {
+        Scania scania = new Scania();
+        scania.raisePlatform(10);
+        scania.startEngine();
+
+        assertThrows(IllegalArgumentException.class, () -> scania.gas(1));
+    }
 }
