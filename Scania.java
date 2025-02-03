@@ -23,13 +23,14 @@ public class Scania extends Car {
         platformDegree -= amount;
     }
 
-    public void incrementSpeed(double amount) {
-        if (amount < 0 || amount > 1) throw new IllegalArgumentException("Amount must be between 0 and 1");
-        currentSpeed = Math.min(currentSpeed + speedFactor() * amount, enginePower);
+    @Override
+    public void gas(double amount) {
+        if (getPlatformDegree() > 0) throw new IllegalArgumentException("Error");
+        super.gas(amount);
     }
 
     @Override
-    protected double speedFactor() {
+    protected double speedFactor(){
         return getEnginePower() * 0.01;
     }
 
