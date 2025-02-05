@@ -1,4 +1,3 @@
-    package org.example;
 import java.awt.*;
 
 public class Scania extends Car {
