@@ -97,6 +97,15 @@ public abstract class Car implements Movable {
         return y;
     }
 
+    // for Transport to overwrite this on still Cars
+    protected void setX(double x) {
+        this.x = x;
+    }
+
+    protected void setY(double y) {
+        this.y = y;
+    }
+
     public double getDirection() {
         return direction;
     }

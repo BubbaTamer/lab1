@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Scania extends Car {
+public class Scania extends Transport {
 
     private double platformDegree;
 
@@ -12,25 +12,32 @@ public class Scania extends Car {
         return platformDegree;
     }
 
+    // useless implementation
+    @Override
+    protected boolean canLoadUnload() {
+        return platformDegree == 0;
+    }
+
+    @Override
+    protected void validateMovement() {
+        if (platformDegree != 0)
+            throw new IllegalStateException();
+    }
+
     public void raisePlatform(double amount) {
-        if (getCurrentSpeed() > 0 || (getPlatformDegree() + amount) > 70) throw new IllegalArgumentException("Error");
+        if (getCurrentSpeed() > 0 || (platformDegree + amount) > 70)
+            throw new IllegalArgumentException("Cant raise platform");
         platformDegree += amount;
     }
 
     public void lowerPlatform(double amount) {
-        if (getCurrentSpeed() > 0 || (getPlatformDegree() - amount) < 0) throw new IllegalArgumentException("Error");
+        if (getCurrentSpeed() > 0 || (platformDegree - amount) < 0)
+            throw new IllegalArgumentException("Cant lower platform");
         platformDegree -= amount;
     }
 
     @Override
-    public void gas(double amount) {
-        if (getPlatformDegree() > 0) throw new IllegalArgumentException("Error");
-        super.gas(amount);
-    }
-
-    @Override
-    protected double speedFactor(){
+    protected double speedFactor() {
         return getEnginePower() * 0.01;
     }
-
 }
