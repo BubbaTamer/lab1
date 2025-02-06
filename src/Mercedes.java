@@ -1,9 +1,9 @@
 import java.awt.*;
 
-public class Volvo extends Transport {
+public class Mercedes extends Transport {
     private boolean rampDown;
 
-    public Volvo() {
+    public Mercedes() {
         super(2, Color.red, 760, "Volvo");
     }
 
@@ -28,8 +28,11 @@ public class Volvo extends Transport {
     }
 
     public Car unloadCar() {
-        return canLoadUnload() && !carStack.isEmpty() ?
-                carStack.pop() : null;
+        if (canLoadUnload() && !carStack.isEmpty()) {
+            return carStack.pop();
+        } else {
+            throw new IllegalStateException("Cannot unload car whilst driving.");
+        }
     }
 
     @Override
