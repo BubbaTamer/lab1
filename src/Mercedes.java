@@ -1,38 +1,36 @@
 import java.awt.*;
 
-public class Mercedes extends Transport {
-    private boolean rampDown;
+public class Mercedes extends Car {
+    private final Transport transport;
 
     public Mercedes() {
         super(2, Color.red, 760, "Volvo");
+        transport = new Transport(this);
+        enableTransport(transport);
     }
 
-    @Override
-    public boolean canLoadUnload() {
-        return rampDown;
+    public void rampDown() {
+        transport.lower(70);
     }
 
-    public void validateMovement() {
-        if (rampDown) {
-            throw new IllegalStateException();
-        }
-    }
-
-    public void toggleRamp() {
-        if (getCurrentSpeed() == 0) rampDown = !rampDown;
-        else throw new IllegalStateException("Ramp cannot be lowered while driving.");
-    }
-
-    public void loadCar(Car car) {
-        if (validateLoad(car)) carStack.push(car);
+    public void rampUp() {
+        transport.raise(70);
     }
 
     public Car unloadCar() {
-        if (canLoadUnload() && !carStack.isEmpty()) {
-            return carStack.pop();
-        } else {
-            throw new IllegalStateException("Cannot unload car whilst driving.");
+        return transport.unloadCar();
+    }
+
+    public void loadCar(Car car) {
+        transport.loadCar(car);
+    }
+
+    @Override
+    public void gas(double amount) {
+        if (transport.getAngle() == 0) {
+            super.gas(amount);
         }
+        throw new IllegalArgumentException("Cannot gas while ramp is up.");
     }
 
     @Override

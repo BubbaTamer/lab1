@@ -1,69 +1,121 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.awt.*;
 
-public class TransportTest {
-    private Scania scania;
-    private Mercedes mercedes;
-    private Car rampCar;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class TransportTest {
+    private Transport transport;
+    private TestCar transporterCar;
+    private TestCar normalCar;
+    private TestCar distantCar;
+
+    static class TestCar extends Car {
+        public TestCar() {
+            super(4, Color.RED, 100, "TestCar");
+        }
+
+        @Override
+        protected double speedFactor() {
+            return 1.0;
+        }
+    }
 
     @BeforeEach
     void setUp() {
-        scania = new Scania();
-        mercedes = new Mercedes();
-        rampCar = new Volvo240();
-    }
+        transporterCar = new TestCar();
 
-    // Scania test
-    @Test
-    void raisePlatformWhileMovingThrows() {
-        scania.startEngine();
-        scania.gas(0.5);
-        assertThrows(IllegalArgumentException.class, () -> scania.raisePlatform(10));
-    }
+        normalCar = new TestCar();
+        normalCar.setX(0);
+        normalCar.setY(0);
 
-    @Test
-    void lowerPlatformBelowZeroThrows() {
-        assertThrows(IllegalArgumentException.class, () -> scania.lowerPlatform(10));
-    }
+        distantCar = new TestCar();
+        distantCar.setX(3);
+        distantCar.setY(4);
 
-    // Mercedes (with Ramp) test
-    @Test
-    void testToggleRampWhenStill() {
-        mercedes.toggleRamp();
-        assertTrue(mercedes.canLoadUnload());
+        TestCar transportVehicle = new TestCar();
+        transportVehicle.setX(0);
+        transportVehicle.setY(0);
+        transport = new Transport(transportVehicle);
+        transporterCar.enableTransport(transport);
     }
 
     @Test
-    void testToggleRampWhileMoving() {
-        mercedes.startEngine();
-        mercedes.gas(0.5);
-        assertThrows(IllegalStateException.class, mercedes::toggleRamp);
+    void testLoadCarNormalConditions() {
+        transport.loadCar(normalCar);
+        assertEquals(normalCar, transport.unloadCar());
     }
 
     @Test
-    void testLoadCarWithRampDown() {
-        mercedes.toggleRamp();
-        mercedes.loadCar(rampCar);
-
-        mercedes.toggleRamp(); // up and
-        mercedes.toggleRamp(); // down to simulate normal situation
-
-        assertEquals(rampCar, mercedes.unloadCar());
+    void testLoadCarPlatformRaised() {
+        transport.raise(10);
+        assertThrows(FullCapacityException.class, () -> transport.loadCar(normalCar));
     }
 
     @Test
-    void testUnloadCarWithRampUp() {
-        mercedes.toggleRamp();
-        mercedes.loadCar(rampCar);
-        mercedes.toggleRamp();
-        assertThrows(IllegalStateException.class, mercedes::unloadCar);
+    void testLoadCarFullCapacity() {
+        transport.loadCar(normalCar);
+        transport.loadCar(normalCar);
+        assertThrows(FullCapacityException.class, () -> transport.loadCar(normalCar));
     }
 
     @Test
-    void testMoveWithRampDown() {
-        mercedes.toggleRamp();
-        assertThrows(IllegalStateException.class, () -> mercedes.gas(1));
+    void testLoadCarTransporterVehicle() {
+        assertThrows(FullCapacityException.class, () -> transport.loadCar(transporterCar));
+    }
+
+    @Test
+    void testUnloadCarValidConditions() {
+        transport.loadCar(normalCar);
+        Car unloaded = transport.unloadCar();
+        assertEquals(normalCar, unloaded);
+    }
+
+    @Test
+    void testUnloadCarEmptyStack() {
+        assertThrows(IllegalStateException.class, () -> transport.unloadCar());
+    }
+
+    @Test
+    void testRaisePlatformWithinLimits() {
+        transport.raise(70);
+        assertEquals(70, transport.getAngle());
+    }
+
+    @Test
+    void testRaisePlatformOverLimit() {
+        assertThrows(IllegalArgumentException.class, () -> transport.raise(71));
+    }
+
+    @Test
+    void testLowerPlatformWithinLimits() {
+        transport.raise(30);
+        transport.lower(10);
+        assertEquals(20, transport.getAngle());
+    }
+
+    @Test
+    void testLowerPlatformBelowZero() {
+        assertThrows(IllegalArgumentException.class, () -> transport.lower(1));
+    }
+
+    @Test
+    void testSetCarsPosition() {
+        TestCar car = new TestCar();
+        car.setX(1);
+        car.setY(1);
+
+        transport.loadCar(car);
+        transport.setCarsPosition();
+
+        assertEquals(0.0, car.getX());
+        assertEquals(0.0, car.getY());
+    }
+
+    @Test
+    void testValidateLoadDistantCar() {
+        assertThrows(IllegalArgumentException.class, () -> transport.validateLoad(distantCar));
     }
 }

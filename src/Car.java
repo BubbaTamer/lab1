@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Objects;
 
 public abstract class Car implements Movable {
 
@@ -6,6 +7,7 @@ public abstract class Car implements Movable {
     private final double enginePower; // Engine power of the car
     private Color color; // Color of the car
     private final String modelName; // The car model name
+    private Transport transport;
 
     // don't allow external class to affect this
 
@@ -97,6 +99,10 @@ public abstract class Car implements Movable {
         return y;
     }
 
+    public double getDirection() {
+        return direction;
+    }
+
     // for Transport to overwrite this on still Cars
     protected void setX(double x) {
         this.x = x;
@@ -106,7 +112,9 @@ public abstract class Car implements Movable {
         this.y = y;
     }
 
-    public double getDirection() {
-        return direction;
+    // Transport composition
+    public void enableTransport(Transport transport) {
+        this.transport = Objects.requireNonNull(transport);
     }
+    public boolean canTransport() { return transport != null; }
 }

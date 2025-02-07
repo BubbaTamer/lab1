@@ -1,39 +1,31 @@
 import java.awt.*;
 
-public class Scania extends Transport {
-
-    private double platformDegree;
+public class Scania extends Car {
+    private final Transport transport;
 
     public Scania() {
         super(2, Color.white, 600, "Scania");
+        transport = new Transport(this);
+        enableTransport(transport);
     }
 
-    public double getPlatformDegree() {
-        return platformDegree;
+    public boolean isRampDown() {
+        return transport.getAngle() != 70;
     }
 
-    // useless implementation
+    public void raisePlatform(double deg) {
+        transport.raise(deg);
+    }
+
+    public void lowerPlatform(double deg) {
+        transport.lower(deg);
+    }
+
     @Override
-    protected boolean canLoadUnload() {
-        return platformDegree == 0;
-    }
-
-    @Override
-    protected void validateMovement() {
-        if (platformDegree != 0)
-            throw new IllegalStateException();
-    }
-
-    public void raisePlatform(double amount) {
-        if (getCurrentSpeed() > 0 || (platformDegree + amount) > 70)
-            throw new IllegalArgumentException("Cant raise platform");
-        platformDegree += amount;
-    }
-
-    public void lowerPlatform(double amount) {
-        if (getCurrentSpeed() > 0 || (platformDegree - amount) < 0)
-            throw new IllegalArgumentException("Cant lower platform");
-        platformDegree -= amount;
+    public void move() {
+        if (transport.getAngle() != 0) throw new IllegalStateException("Transport can't move while ramp is up.");
+        super.move();
+        transport.setCarsPosition();
     }
 
     @Override
