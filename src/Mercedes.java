@@ -27,7 +27,8 @@ public class Mercedes extends Car {
 
     @Override
     public void move() {
-        if (transport.getAngle() != 0) throw new IllegalStateException("Transport can't move while ramp is up.");
+        if (transport.getAngle() != 0) 
+            throw new IllegalStateException("Transport can't move while ramp is up.");
         super.move();
         transport.setCarsPosition();
     }
