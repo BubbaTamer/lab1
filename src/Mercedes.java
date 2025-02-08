@@ -26,11 +26,10 @@ public class Mercedes extends Car {
     }
 
     @Override
-    public void gas(double amount) {
-        if (transport.getAngle() == 0) {
-            super.gas(amount);
-        }
-        throw new IllegalArgumentException("Cannot gas while ramp is up.");
+    public void move() {
+        if (transport.getAngle() != 0) throw new IllegalStateException("Transport can't move while ramp is up.");
+        super.move();
+        transport.setCarsPosition();
     }
 
     @Override
