@@ -1,10 +1,10 @@
 public class Verkstad<T extends Car> {
-    private final Transport transport;
+    private final Transport<T> transport;
 
     public Verkstad(int capacity) {
         if (capacity < 0)
             throw new IllegalArgumentException("Capacity must be a positive integer");
-        transport = new Transport(capacity);
+        transport = new Transport<>(null, capacity);
     }
 
     public void loadCar(T car) {
@@ -12,7 +12,6 @@ public class Verkstad<T extends Car> {
     }
 
     public T getLastCar() {
-        // cast to return type of Car object.
-        return (T)transport.unloadCar();
+        return transport.unloadCar();
     }
 }

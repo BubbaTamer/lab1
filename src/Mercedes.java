@@ -1,12 +1,15 @@
 import java.awt.*;
 
-public class Mercedes extends Car {
-    private final Transport transport;
+public class Mercedes extends Car implements TransportCar {
+    private final Transport<Car> transport;
 
     public Mercedes() {
-        super(2, Color.red, 760, "Volvo");
-        transport = new Transport(this);
-        enableTransport(transport);
+        super(2, Color.red, 760, "Mercedes");
+        transport = new Transport<>(this, 4);
+    }
+
+    public boolean isRampDown() {
+        return transport.getAngle() != 70;
     }
 
     public void rampDown() {
@@ -27,7 +30,7 @@ public class Mercedes extends Car {
 
     @Override
     public void move() {
-        if (transport.getAngle() != 0) 
+        if (transport.getAngle() != 0)
             throw new IllegalStateException("Transport can't move while ramp is up.");
         super.move();
         transport.setCarsPosition();

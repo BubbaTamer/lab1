@@ -1,45 +1,28 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TransportTest {
-    private Transport transport;
-    private TestCar transporterCar;
-    private TestCar normalCar;
-    private TestCar distantCar;
-
-    static class TestCar extends Car {
-        public TestCar() {
-            super(4, Color.RED, 100, "TestCar");
-        }
-
-        @Override
-        protected double speedFactor() {
-            return 1.0;
-        }
-    }
+    private Transport<Car> transport;
+    private Mercedes transporterCar;
+    private Saab95 normalCar;
+    private Volvo240 distantCar;
 
     @BeforeEach
     void setUp() {
-        transporterCar = new TestCar();
+        normalCar = new Saab95();
+        normalCar.setPosition(0, 0);
 
-        normalCar = new TestCar();
-        normalCar.setX(0);
-        normalCar.setY(0);
+        distantCar = new Volvo240();
+        distantCar.setPosition(3,4);
 
-        distantCar = new TestCar();
-        distantCar.setX(3);
-        distantCar.setY(4);
+        Mercedes transportVehicle = new Mercedes();
+        transportVehicle.setPosition(0, 0);
 
-        TestCar transportVehicle = new TestCar();
-        transportVehicle.setX(0);
-        transportVehicle.setY(0);
-        transport = new Transport(transportVehicle);
-        transporterCar.enableTransport(transport);
+        transporterCar = new Mercedes();
+        transport = new Transport<>(transporterCar,2);
     }
 
     @Test
@@ -103,9 +86,7 @@ class TransportTest {
 
     @Test
     void testSetCarsPosition() {
-        TestCar car = new TestCar();
-        car.setX(1);
-        car.setY(1);
+        Saab95 car = new Saab95();
 
         transport.loadCar(car);
         transport.setCarsPosition();
